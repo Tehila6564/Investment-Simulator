@@ -1,0 +1,23 @@
+# --- Node / React ---
+node_modules/
+dist/
+.env
+npm-debug.log*
+
+# --- .NET / C# ---
+bin/
+obj/
+/TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- Databases ---
+*.db
+*.db-journal
+
+# --- IDEs ---
+.vscode/
+.idea/
+.DS_Store
