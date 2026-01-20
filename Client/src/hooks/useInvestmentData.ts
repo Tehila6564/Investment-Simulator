@@ -11,6 +11,10 @@ export function useInvestmentData() {
   const [balance, setBalance] = useState(0);
   const [active, setActive] = useState<ActiveInvestment[]>([]);
   const [available, setAvailable] = useState<InvestmentOption[]>([]);
+  const [lastBalanceUpdate, setLastBalanceUpdate] = useState<string | null>(
+    null
+  );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,6 +32,7 @@ export function useInvestmentData() {
       setAvailable(options);
       setBalance(state.balance);
       setActive(state.activeInvestments);
+      setLastBalanceUpdate(state.lastBalanceUpdate);
       setError(null);
     } catch (err: any) {
       setError(err.message || "Failed to load data");
@@ -49,6 +54,7 @@ export function useInvestmentData() {
         (newData: UserState) => {
           setBalance(newData.balance);
           setActive(newData.activeInvestments);
+          setLastBalanceUpdate(newData.lastBalanceUpdate);
         }
       );
 
@@ -70,6 +76,8 @@ export function useInvestmentData() {
     available,
     loading,
     error,
+
+    lastBalanceUpdate,
     refresh: loadAllData,
   };
 }

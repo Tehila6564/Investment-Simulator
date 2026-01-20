@@ -65,6 +65,7 @@ public class InvestmentService : IInvestmentService
         };
 
         user.Balance -= option.RequiredAmount;
+        user.LastBalanceUpdate = DateTime.UtcNow;
         _context.ActiveInvestments.Add(newInvestment);
 
         await _context.SaveChangesAsync();
@@ -94,6 +95,7 @@ public class InvestmentService : IInvestmentService
             if (user != null)
             {
                 user.Balance += inv.ExpectedReturn;
+                user.LastBalanceUpdate = DateTime.UtcNow;
                 _context.ActiveInvestments.Remove(inv);
             }
         }
@@ -133,6 +135,6 @@ public class InvestmentService : IInvestmentService
             (int)Math.Max(0, (i.EndsAt - now).TotalSeconds)
         )).ToList();
 
-        return new UserStateDto(user.Balance, activeDtos);
+        return new UserStateDto(user.Balance, activeDtos, user.LastBalanceUpdate);
     }
 }

@@ -17,4 +17,5 @@ export interface ActiveInvestment {
 export interface UserState {
   balance: number;
   activeInvestments: ActiveInvestment[];
+  lastBalanceUpdate: string;
 }

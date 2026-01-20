@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -10,9 +11,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260120185644_AddLastBalanceUpdate")]
+    partial class AddLastBalanceUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.20");
@@ -67,32 +70,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("InvestmentOptions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            DurationSeconds = 30,
-                            ExpectedReturn = 525m,
-                            Name = "Short-term Bond",
-                            RequiredAmount = 500m
-                        },
-                        new
-                        {
-                            Id = "2",
-                            DurationSeconds = 60,
-                            ExpectedReturn = 1680m,
-                            Name = "Tech Stock Bundle",
-                            RequiredAmount = 1500m
-                        },
-                        new
-                        {
-                            Id = "3",
-                            DurationSeconds = 120,
-                            ExpectedReturn = 6250m,
-                            Name = "Venture Capital",
-                            RequiredAmount = 5000m
-                        });
                 });
 
             modelBuilder.Entity("Server.Models.User", b =>

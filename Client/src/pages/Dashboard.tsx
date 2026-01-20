@@ -1,54 +1,106 @@
 import { useInvestmentData } from "../hooks/useInvestmentData";
 import { useInvest } from "../hooks/useInvest";
 import { ActiveInvestmentItem } from "../components/ActiveInvestmentItem";
-import { AvailableInvestments } from "../components/AvailableInvestments"; // ייבוא הרכיב
+import { AvailableInvestments } from "../components/AvailableInvestments";
+import { Box, Typography, Container } from "@mui/material";
+import { formatLastUpdate } from "../utils/dateFormatter";
 
 export default function Dashboard() {
-  const { balance, active, available, loading, error } = useInvestmentData();
+  const { balance, active, available, loading, error, lastBalanceUpdate } =
+    useInvestmentData();
+  const { invest, processingId } = useInvest();
 
-  const { invest, processingId, lastError } = useInvest();
-
-  if (loading) return <div>Loading data...</div>;
-  if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
+  if (loading) return <Typography sx={{ p: 4 }}>Loading...</Typography>;
+  if (error)
+    return (
+      <Typography color="error" sx={{ p: 4 }}>
+        Error: {error}
+      </Typography>
+    );
 
   const username = localStorage.getItem("investment_username") || "User";
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Investment Dashboard - {username}</h1>
-
-      <div
-        style={{
-          background: "#f4f4f4",
-          padding: "15px",
-          borderRadius: "8px",
-          marginBottom: "20px",
+    <Container maxWidth={false} sx={{ py: 4, width: "100vw" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          mb: 4,
+          p: 3,
+          border: "1px solid black",
+          boxSizing: "border-box",
         }}
       >
-        <h2>Current Balance: ${balance.toFixed(2)}</h2>
-      </div>
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+          Hello, {username}
+        </Typography>
 
-      {lastError && (
-        <div style={{ color: "red", marginBottom: "10px" }}>⚠️ {lastError}</div>
-      )}
+        <Box sx={{ textAlign: "right" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            Current Balance: ${balance.toFixed(2)}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Last Update: {formatLastUpdate(lastBalanceUpdate)}
+          </Typography>
+        </Box>
+      </Box>
 
-      <section>
-        <h3>Active Investments ({active.length})</h3>
-        {active.length === 0 ? (
-          <p>No active investments at the moment.</p>
-        ) : (
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {active.map((inv) => (
-              <ActiveInvestmentItem key={inv.id} inv={inv} />
-            ))}
-          </ul>
-        )}
-      </section>
+      <Box
+        sx={{
+          width: "100%",
+          border: "1px solid black",
+          mb: 4,
+          p: 2,
+          boxSizing: "border-box",
+        }}
+      >
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{ mb: 2, borderBottom: "1px solid #ccc", pb: 1 }}
+        >
+          Current Investments
+        </Typography>
 
-      <hr style={{ margin: "30px 0" }} />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {active.length === 0 ? (
+            <Typography align="center">No active investments</Typography>
+          ) : (
+            active.map((inv) => (
+              <Box
+                key={inv.id}
+                sx={{
+                  width: "100%",
+                  border: "1px solid #eee",
+                  p: 2,
+                  boxSizing: "border-box",
+                }}
+              >
+                <ActiveInvestmentItem inv={inv} />
+              </Box>
+            ))
+          )}
+        </Box>
+      </Box>
 
-      <section>
-        <h3>Available Opportunities</h3>
+      <Box
+        sx={{
+          width: "100%",
+          border: "1px solid black",
+          p: 2,
+          boxSizing: "border-box",
+        }}
+      >
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{ mb: 2, borderBottom: "1px solid #ccc", pb: 1 }}
+        >
+          Available Investments
+        </Typography>
 
         <AvailableInvestments
           options={available}
@@ -57,7 +109,7 @@ export default function Dashboard() {
           processingId={processingId}
           onInvest={invest}
         />
-      </section>
-    </div>
+      </Box>
+    </Container>
   );
 }

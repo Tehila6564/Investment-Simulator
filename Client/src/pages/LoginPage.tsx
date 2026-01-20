@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Grid, Button, TextField, Typography } from "@mui/material";
 
 export default function Login() {
   const [name, setName] = useState("");
@@ -9,7 +10,7 @@ export default function Login() {
   const handleLogin = () => {
     const trimmed = name.trim();
     if (trimmed.length < 3) {
-      setError("The name must be at least 3 characters long");
+      setError("Min 3 letters");
       return;
     }
     if (!/^[a-zA-Z]+$/.test(trimmed)) {
@@ -22,18 +23,37 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h1>Investment simulator</h1>
-      <input
+    <Grid
+      container
+      sx={{
+        height: "100vh",
+        width: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        textAlign: "center",
+      }}
+    >
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Investment Simulator
+      </Typography>
+
+      <TextField
+        label="Name"
         value={name}
-        onChange={(e) => {
-          setName(e.target.value);
-          setError("");
-        }}
-        placeholder="Enter name (in English)"
+        onChange={(e) => setName(e.target.value)}
+        error={!!error}
+        helperText={error}
+        sx={{ mb: 2, width: "300px" }}
       />
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <button onClick={handleLogin}>login</button>
-    </div>
+
+      <Button variant="contained" onClick={handleLogin} sx={{ width: "300px" }}>
+        Login
+      </Button>
+    </Grid>
   );
 }
